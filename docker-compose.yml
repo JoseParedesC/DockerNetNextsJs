@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  api:
+    build: 
+      context: ./backend_api
+      dockerfile: Dockerfile
+    image: backend_api:latest
+    container_name: myapi
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresdb
+    networks:
+      - backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgresdb;Port=5432;Database=mylabsdb;Username=admin;Password=developer
+
+  postgresdb:
+    image: postgres:16
+    container_name: postgresdb
+    networks:
+      - backend
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: developer
+      POSTGRES_DB: mylabsdb
+    ports:
+      - "5432:5432"
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:

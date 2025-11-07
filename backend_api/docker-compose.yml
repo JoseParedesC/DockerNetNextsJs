@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  api:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: mylabapi
+    working_dir: /src
+    ports:
+      - "8080:8080"
+    command: ["dotnet", "run", "--urls", "http://0.0.0.0:8080"]
+    volumes:
+      - ./src:/src
