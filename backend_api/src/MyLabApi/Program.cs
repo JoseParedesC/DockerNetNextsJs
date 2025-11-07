@@ -11,8 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
+// builder.Services.AddDbContext<DatabaseContext>(options =>
+//     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
 
 builder.Services.AddScoped<ProductsService>();

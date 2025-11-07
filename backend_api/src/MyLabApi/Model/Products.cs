@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MyLabApi.Models
 {
     [Table("products")]
-    public class Products
+    public partial class Products
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

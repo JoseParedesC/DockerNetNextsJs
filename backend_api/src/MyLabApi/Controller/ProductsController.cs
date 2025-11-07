@@ -15,11 +15,45 @@ namespace MyLabApi.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        // [HttpGet]
+        // public async Task<IActionResult> GetProducts()
+        // {
+        //     var products = await _service.GetAllProducts();
+        //     return Ok(products);
+        // }
+
+        [HttpGet("GetProducts")]
+        public List<Products> GetProducts()
         {
-            var products = await _service.GetAllProducts();
-            return Ok(products);
+            var products = _service.GetAllProducts();
+            return products;
+        }
+
+        [HttpGet("GetProductById/{id:int}")]
+        public Products GetProductById(int id)
+        {
+            var products = _service.GetProductById(id);
+            return products;
+        }
+
+        [HttpPost("SaveProduct")]
+        public Products SaveProduct([FromBody] Products dataProduct)
+        {
+            var product = _service.SaveProduct(dataProduct);
+            return product;
+        }
+
+        [HttpPut("UpdateProduct/{id:int}")]
+        public Products UpdateProduct([FromBody] Products dataProduct, int id)
+        {
+            var product = _service.UpdateProduct(dataProduct, id);
+            return product;
+        }
+
+        [HttpDelete("DeleteProduct/{id:int}")]
+        public void DeleteProduct(int id)
+        {
+            _service.DeleteProduct(id);
         }
     }
 }
