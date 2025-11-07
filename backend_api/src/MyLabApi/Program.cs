@@ -14,6 +14,17 @@ builder.Services.AddSwaggerGen();
 // builder.Services.AddDbContext<DatabaseContext>(options =>
 //     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReact",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // URL del front
+                  .AllowAnyHeader()                    // Permite cualquier header
+                  .AllowAnyMethod();                   // Permite GET, POST, PUT, DELETE, etc.
+        });
+});
+
 
 builder.Services.AddScoped<ProductsService>();
 builder.Services.AddScoped<VentasService>();
@@ -30,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowReact");
 
 app.MapControllers();
 
