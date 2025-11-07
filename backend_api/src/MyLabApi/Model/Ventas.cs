@@ -18,9 +18,9 @@ namespace MyLabApi.Models
         public string Codigo_factura { get; set; } = string.Empty;
 
         [Column("vendedor")]
-        public int Vendedor { get; set; } = string.Empty;
+        public int Vendedor { get; set; }
 
         [Column("comprador")]
-        public int Comprador { get; set; } = string.Empty;
+        public int Comprador { get; set; }
     }
 }

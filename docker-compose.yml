@@ -8,14 +8,30 @@ services:
     image: backend_api:latest
     container_name: myapi
     ports:
-      - "8080:8080"
+      - "5000:5000"
     depends_on:
       - postgresdb
     networks:
       - backend
     environment:
+      - ASPNETCORE_URLS=http://+:5000
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__PostgresConnection=Host=postgresdb;Port=5432;Database=mylabsdb;Username=admin;Password=developer
+
+  frontend:
+    build:
+      context: ./frontend_next
+      dockerfile: Dockerfile
+    image: frontend_next:latest
+    container_name: react_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - backend
+
 
   postgresdb:
     image: postgres:16

@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<ProductsService>();
+builder.Services.AddScoped<VentasService>();
 
 builder.Services.AddControllers();
 
