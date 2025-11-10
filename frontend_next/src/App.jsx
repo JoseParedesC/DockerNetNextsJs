@@ -1,88 +1,28 @@
-import { useEffect, useState } from "react";
+import Page from "./components/Common/Pages"
+import Products from "./components/Productos/Products"
+import Weather from "./components/Default/Weather"
 
 function App() {
-  const API_URL = import.meta.env.VITE_APP_API_URL
-  const [prueba, setDataP] = useState(null);
-  const [dataProducts, setDataProductos] = useState('');
-  const [error, setError] = useState('');
 
-  const [dataProduct, setDataProducto] = useState('');
-  const [idProducto, setIdProducto] = useState('');
+  const dataPages = [
+    { PageName: "Default", PageCmp: Products },
+    { PageName: "Productos", PageCmp: Weather }
+  ]
 
-  useEffect(() => {
-    fetch(`${API_URL}/weatherforecast`) // Nginx redirige al backend cuando esta configurado el proxy en el nginx.conf /api
-      .then(res => res.json())
-      .then(setDataP)
-      .catch(setError);
-    
-  }, []);
-
-  //Productos
-  const buscarProductos = async () => {
-    try {
-      fetch(`${API_URL}/api/products/GetProducts`) // Nginx redirige al backend
-        .then(res => res.json())
-        .then(setDataProductos)
-        .catch(setError);
-
-    } catch (err) {
-      console.log(err.toString());
-    }
-  }
-
-  const limpiarProductos = () => {
-    setDataProductos('');
-  }
-
-  //Producto
-  const buscarProducto = async () => {
-    try {
-      fetch(`${API_URL}/api/products/GetProductById/${idProducto}`) // Nginx redirige al backend
-        .then(res => res.json())
-        .then(setDataProducto)
-        .catch(setError);
-
-    } catch (err) {
-      console.log(err.toString());
-    }
-  }
-
-  const limpiarProducto = () => {
-    setDataProducto('');
-    setIdProducto('');
-  }
-
-
+  const classTailwind ="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
 
   return (
     <div style={{ padding: "2rem" }}>
       <h1>🚀 Frontend React con Nginx - JdParedesC</h1>
-      <div>HOLA </div>
-      <pre>{JSON.stringify(prueba, `No hay conexion al backend`, 2)}</pre>
-      <hr></hr>
-      <button onClick={buscarProductos}>Search</button>
-      <button onClick={limpiarProductos}>Clear</button>
-      <pre>{JSON.stringify(dataProducts, "No hay conexion a la base de datos", 2)}</pre>
-      <hr />
-      <a href="http://localhost:5000/weatherforecast">{API_URL}/weatherforecast</a>
-      <hr />
-      <div>
-        <label>
-          Id de producto{" "}
-          <input
-            type="text"
-            value={idProducto}
-            onChange={(e) => setIdProducto(e.target.value)}
-            placeholder="Ej: 1"
-          />
-        </label>
-        <button onClick={buscarProducto}>Search</button>
-        <button onClick={limpiarProducto}>Clear</button>
-        <pre>{JSON.stringify(dataProduct, "No hay conexion a la base de datos", 2)}</pre>
+      <Page dataPages={dataPages}></Page>
+
+      <div class="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+        <img class="size-12 shrink-0" src="/img/logo.svg" alt="ChitChat Logo" />
+        <div>
+          <div class="text-xl font-medium text-black dark:text-white">ChitChat</div>
+          <p class="text-gray-500 dark:text-gray-400">You have a new message!</p>
+        </div>
       </div>
-      <hr />
-      <p>Errores:</p>
-      <pre>{JSON.stringify(error, "No hay conexion a la base de datos", 2)}</pre>
     </div>
   );
 }
