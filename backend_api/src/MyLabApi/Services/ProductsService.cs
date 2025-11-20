@@ -8,17 +8,17 @@ namespace MyLabApi.Services
     public class ProductsService
     {
         private List<Products> productosList = Products.ProductosPorDefecto;
-        // private readonly DatabaseContext _context;
+        private readonly DatabaseContext _context;
 
-        // public ProductsService(DatabaseContext context)
-        // {
-        //     _context = context;
-        // }
+        public ProductsService(DatabaseContext context)
+        {
+            _context = context;
+        }
 
-        // public Task<List<Products>> GetAllProducts()
-        // {
-        //     return await _context.Products.ToListAsync();
-        // }
+        public async Task<List<Products>> GetAllProductsDB()
+        {
+            return await _context.Products.ToListAsync();
+        }
 
         public List<Products> GetAllProducts()
         {

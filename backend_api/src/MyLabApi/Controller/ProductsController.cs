@@ -15,12 +15,12 @@ namespace MyLabApi.Controllers
             _service = service;
         }
 
-        // [HttpGet]
-        // public async Task<IActionResult> GetProducts()
-        // {
-        //     var products = await _service.GetAllProducts();
-        //     return Ok(products);
-        // }
+        [HttpGet]
+        public async Task<IActionResult> GetProductsDB()
+        {
+            var products = await _service.GetAllProductsDB();
+            return Ok(products);
+        }
 
         [HttpGet("GetProducts")]
         public List<Products> GetProducts()

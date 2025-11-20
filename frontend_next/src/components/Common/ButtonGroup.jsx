@@ -37,7 +37,8 @@ const ButtonGroup = ({ dataPages }) => {
             }
             {/* <button onClick="">Default</button>
             <button onClick="">Productos</button> */}
-            <button onClick={() => sumar(10, "20")}>Sumar</button>
+            <button class="button" onClick={() => sumar(10, "20")}>Sumar</button>
+            <button className="button" onClick={() => setSumaTs(10, "20")}>Sumar</button>
             <ul>
                 <li>Suma Js: {sumaJs}</li>
                 <li>Suma Ts: {sumaTs}</li>

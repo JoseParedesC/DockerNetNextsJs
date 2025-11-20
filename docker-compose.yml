@@ -1,29 +1,44 @@
 version: "3.9"
 
 services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: developer
+      POSTGRES_DB: mylabsdb
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   api:
-    build: 
+    build:
       context: ./backend_api
       dockerfile: Dockerfile
     image: backend_api:latest
-    container_name: myapi
+    container_name: backend_api
+    depends_on:
+      - postgres
     ports:
       - "5000:5000"
-    depends_on:
-      - postgresdb
     networks:
       - backend
     environment:
-      - ASPNETCORE_URLS=http://+:5000
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__PostgresConnection=Host=postgresdb;Port=5432;Database=mylabsdb;Username=admin;Password=developer
+      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PostgresConnection: Host=postgres;Port=5432;Database=mylabsdb;Username=admin;Password=developer
 
   frontend:
     build:
       context: ./frontend_next
       dockerfile: Dockerfile
     image: frontend_next:latest
-    container_name: react_frontend
+    container_name: frontend_next
     restart: always
     ports:
       - "3000:3000"
@@ -33,25 +48,14 @@ services:
       - backend
   
   frontend-node:
-    image: node:22-alpine
+    image: node:25-alpine3.21
     working_dir: /app
+    container_name: frontend-node
     volumes:
       - ./frontend_next:/app
       - /app/node_modules
-
-
-  postgresdb:
-    image: postgres:16
-    container_name: postgresdb
     networks:
       - backend
-    restart: always
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: developer
-      POSTGRES_DB: mylabsdb
-    ports:
-      - "5432:5432"
 
 networks:
   backend:
