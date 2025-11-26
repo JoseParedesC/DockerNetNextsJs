@@ -16,7 +16,7 @@ namespace MyLabApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductsDB()
+    public async Task<IActionResult> GetProductsDB()
         {
             var products = await _service.GetAllProductsDB();
             return Ok(products);

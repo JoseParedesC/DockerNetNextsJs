@@ -1,29 +1,36 @@
-# Etapa 1: Build
+# Etapa 1: SDK → Build + EF migrations
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Copiar csproj y restaurar dependencias
-COPY src/MyLabApi/*.csproj ./
+# Copiar csproj
+COPY src/MyLabApi/*.csproj .
 RUN dotnet restore
 
-# Copiar código fuente
-COPY src/MyLabApi/ ./
+# Copiar todo el código
+COPY src/MyLabApi/ .
 
-# Publicar en Release
-RUN dotnet publish -c Release -o /publish
+# Instalar EF como herramienta local
+RUN dotnet tool restore
+
+# Crear migraciones si no existen
+RUN if [ ! -d "./Migrations" ]; then \
+      dotnet tool run dotnet-ef migrations add InitialCreate; \
+    fi
+
+# Publicar app
+RUN dotnet publish -c Release -o /out
+
 
 # Etapa 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Herramientas necesarias
 RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /publish ./
+COPY --from=build /out .
 
 EXPOSE 5000
 
-# ENTRYPOINT que espera a PostgreSQL antes de iniciar
 ENTRYPOINT ["sh", "-c", "\
   echo 'Esperando a PostgreSQL...' && \
   until nc -z postgres 5432; do sleep 1; done && \
