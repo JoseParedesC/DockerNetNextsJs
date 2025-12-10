@@ -15,12 +15,44 @@ namespace MyLabApi.Controllers
             _service = service;
         }
 
+        #region DATABASE
         [HttpGet]
-    public async Task<IActionResult> GetProductsDB()
+        public async Task<IActionResult> GetProductsDB()
         {
             var products = await _service.GetAllProductsDB();
             return Ok(products);
         }
+
+        [HttpGet("GetById/{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var products = await _service.GetByIdDB(id);
+            return Ok(products);
+        }
+
+        [HttpPost("SaveProductDB")]
+        public async Task<IActionResult> SaveProductDB([FromBody] Products dataProduct)
+        {
+            var product = await _service.SaveProductDB(dataProduct);
+            return Ok(product);
+        }
+
+        [HttpPut("UpdateProductDB/{id:int}")]
+        public async Task<IActionResult> UpdateProductDB([FromBody] Products dataProduct, int id)
+        {
+            var product = await _service.UpdateProductDB(dataProduct, id);
+            return Ok(product);
+        }
+
+        [HttpDelete("DeleteProductDB/{id:int}")]
+        public async Task<IActionResult> DeleteProductDB(int id)
+        {
+            return Ok(await _service.DeleteProductDB(id));
+        }
+
+        #endregion DATABASE
+
+        #region LIST
 
         [HttpGet("GetProducts")]
         public List<Products> GetProducts()
@@ -55,5 +87,7 @@ namespace MyLabApi.Controllers
         {
             _service.DeleteProduct(id);
         }
+
+        #endregion LIST
     }
 }

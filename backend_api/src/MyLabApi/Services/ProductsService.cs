@@ -2,6 +2,7 @@ using MyLabApi.Data;
 using MyLabApi.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace MyLabApi.Services
 {
@@ -15,11 +16,53 @@ namespace MyLabApi.Services
             _context = context;
         }
 
+        #region DATABASE
         public async Task<List<Products>> GetAllProductsDB()
         {
             return await _context.Products.ToListAsync();
         }
 
+        public async Task<Products> GetByIdDB(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<Products> SaveProductDB(Products dtoProducto)
+        {
+            _context.Products.Add(dtoProducto);
+            await _context.SaveChangesAsync();
+            return await GetByIdDB(dtoProducto.Id);
+        }
+
+        public async Task<Products> UpdateProductDB(Products dtoProducto, int idProducto)
+        {
+            var prod = await _context.Products.FindAsync(idProducto);
+            if(prod == null) return new Products();
+
+            prod.Code = dtoProducto.Code;
+            prod.Name = dtoProducto.Name;
+            prod.Description = dtoProducto.Description;
+            prod.Present = dtoProducto.Present;
+
+            await _context.SaveChangesAsync();
+
+            return await GetByIdDB(idProducto);
+        }
+
+        public async Task<bool> DeleteProductDB(int idProducto)
+        {
+            var prod = await _context.Products.FindAsync(idProducto);
+            if(prod == null) return false;
+
+            _context.Products.Remove(prod);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        #endregion DATABASE
+
+        #region LIST
         public List<Products> GetAllProducts()
         {
             return productosList;
@@ -58,5 +101,7 @@ namespace MyLabApi.Services
 
             productosList.Remove(prod_delete);
         }
+
+        #endregion LIST
     }
 }

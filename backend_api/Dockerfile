@@ -12,10 +12,10 @@ COPY src/MyLabApi/ .
 # Instalar EF como herramienta local
 RUN dotnet tool restore
 
-# Crear migraciones si no existen
-RUN if [ ! -d "./Migrations" ]; then \
-      dotnet tool run dotnet-ef migrations add InitialCreate; \
-    fi
+# # Crear migraciones si no existen
+# RUN if [ ! -d "./Migrations" ]; then \
+#       dotnet tool run dotnet-ef migrations add InitialCreate; \
+#     fi
 
 # Publicar app
 RUN dotnet publish -c Release -o /out
